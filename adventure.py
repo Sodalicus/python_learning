@@ -20,6 +20,7 @@ class Place():
 
     def add_entity(self, entity):
         if not entity in self.surface:
+            entity.set_coords(self.coords)
             self.surface.append(entity)
 
     def remove_entity(self, entity):
@@ -30,16 +31,24 @@ class Place():
         rep = self.typeOfTerrain[0:1]
         return rep
 
+    def coords(self):
+        return self.xy
+
 class Player():
     def __init__(self, name, xy=[0,0]):
         self.name = name
-        self.location = xy
+        self.xy = xy
 
     def move(self, where):
         pass
 
+    def set_coords(self, xy=[0,0]):
+        self.xy = xy
+        
+
     def coords(self):
-        return self.location
+        print(self.xy)
+        return str(self.xy)
 
 
 class WorldMap():
