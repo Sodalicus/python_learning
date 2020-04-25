@@ -4,6 +4,10 @@
 # Author: Paweł Krzemiński
 
 from tkinter import *
+import time
+
+WIDTH = 640
+HEIGHT = 480
 
 class Application(Frame):
     def __init__(self, master):
@@ -12,11 +16,10 @@ class Application(Frame):
         self.create_canvas()
         self.myship = Ship(self.canvas, 1,1)
         self.create_widgets()
+        self.master = master
 
     def create_canvas(self):
-        self.canvas_width = 640
-        self.canvas_height = 480
-        self.canvas = Canvas(height = 480, width = 640, background = "white")
+        self.canvas = Canvas(height = HEIGHT , width = WIDTH , background = "white")
         self.canvas.grid(row = 0, column = 0)
 
 
@@ -26,17 +29,24 @@ class Application(Frame):
 
     def move_sprite(self):
         self.myship.move()
-        root.update()
+
+    def main(self):
+        while True:
+            self.myship.move()
+            self.master.update_idletasks()
+            self.master.update()
+            time.sleep(0.5)
 
 
 class Sprite():
-    def __init__(self, x, y, dx=0, dy=0):
+    def __init__(self, x, y, canvas, dx=0, dy=0):
         """ Create  shape with given center x, y"""
         pass
         self.x = x
         self.y = y
         self.dx = dx
         self.dy = dy
+        self.canvas = canvas
 
     def move(self):
         pass
@@ -48,28 +58,27 @@ class Sprite():
         pass
 
 class AsteroidLarge(Sprite):
-    def __init__(self):
-        super(AsteroidLarge, self).__init__(self)
-        pass
+    def __init__(self, canvas, x, y):
+        super(AsteroidLarge, self).__init__(self, canvas, x, y)
+        self.id = kj 
 
 
 class AsteroidMedium(Sprite):
-    def __init__(self):
-        super(AsteroidMedium, self).__init__(self)
+    def __init__(self, canvas, x, y):
+        super(AsteroidMedium, self).__init__(self, canvas, x, y)
         pass
 
 
 class AsteroidSmall(Sprite):
-    def __init__(self):
-        super(AsteroidSmall, self).__init__(self)
+    def __init__(self, canvas, x, y):
+        super(AsteroidSmall, self).__init__(self, canvas, x, y)
         pass
 
 
 class Ship(Sprite):
     def __init__(self, canvas, x, y):
-        super(Ship, self).__init__(self, x, y)
-        self.canvas = canvas
-        self.id = self.canvas.create_polygon(1,1,10,1,8,5, fill="", outline="black")
+        super(Ship, self).__init__(self, canvas, x, y)
+        self.id = self.canvas.create_polygon(1,1,20,1,16,10, fill="", outline="black")
         self.canvas.move(self.id, 200,300)
 
     def move(self):
@@ -77,4 +86,4 @@ class Ship(Sprite):
 root = Tk()
 root.title("Asteroids")
 app = Application(root)
-root.mainloop()
+app.main()
