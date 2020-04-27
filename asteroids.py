@@ -44,7 +44,6 @@ class Application(Frame):
 
 
     def main(self):
-        self.myship = Ship(self.canvas, 1, 1)
         for i in range(10):
             i = AsteroidLarge(self.canvas, 1, 1)
             self.add_sprite(i)
@@ -82,7 +81,15 @@ class Sprite():
         pass
 
     def coords(self):
-        pass
+        self.coords = self.canvas.coords(self.id)
+        self.x1 = self.coords[0]
+        self.y1 = self.coords[1]
+        self.x2 = self.coords[2]
+        self.y2 = self.coords[3]
+
+    def within_y(self, sprite):
+        for sprite in self.sprites:
+            if sprite==
 
 
 class Ship(Sprite):
