@@ -39,7 +39,8 @@ class Application(Frame):
     def update_results(self):
         number = 0
         if self.number_ent.get():
-            number = int(self.number_ent.get()) self.tries -= 1
+            number = int(self.number_ent.get())
+            self.tries -= 1
         if self.tries < 0: self.tries = 0
         if self.tries > 0 and number > self.random_number:
             self.info = "Szukana liczba jest mniejsza."

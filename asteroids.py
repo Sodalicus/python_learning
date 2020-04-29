@@ -14,14 +14,25 @@ class Application(Frame):
         super(Application, self).__init__(master)
         self.grid()
         self.create_canvas()
-        self.myship = Ship(self.canvas, 1,1)
+        self.myship = Ship(self.canvas)
         self.create_widgets()
         self.master = master
-        self.sprites = []
 
     def create_canvas(self):
         self.canvas = Canvas(height = HEIGHT , width = WIDTH , background = "white")
         self.canvas.grid(row = 0, column = 0, columnspan = 3)
+
+
+
+    def main(self):
+        for i in range(10):
+            i = AsteroidLarge(self.canvas)
+        while True:
+            for sprite in Sprite.sprites:
+                sprite.update()
+            self.master.update_idletasks()
+            self.master.update()
+            time.sleep(0.01)
 
 
     def create_widgets(self):
@@ -32,69 +43,83 @@ class Application(Frame):
         down_button = Button(text = "Down", command = self.myship.move_down)
         down_button.grid(row = 2, column = 1, sticky = N)
         right_button = Button(text = "Right", command = self.myship.move_right)
+
         right_button.grid(row = 2, column = 2, sticky = W)
         self.canvas.bind_all('<KeyPress-Up>', self.myship.move)
         self.canvas.bind_all('<KeyPress-Down>', self.myship.move)
         self.canvas.bind_all('<KeyPress-Left>', self.myship.move)
         self.canvas.bind_all('<KeyPress-Right>', self.myship.move)
 
-    def add_sprite(self, sprite):
-        self.sprites.append(sprite)
-
-
-
-    def main(self):
-        for i in range(10):
-            i = AsteroidLarge(self.canvas, 1, 1)
-            self.add_sprite(i)
-        self.add_sprite(self.myship)
-        while True:
-            for sprite in self.sprites:
-                sprite.update()
-            self.master.update_idletasks()
-            self.master.update()
-            time.sleep(0.01)
 
 
 class Sprite():
-    def __init__(self, canvas, x, y, dx=0, dy=0):
-        """ Create  shape with given center x, y"""
-        pass
-        self.x = x
-        self.y = y
+    sprites = []
+    def __init__(self, canvas, dx=0, dy=0):
         self.dx = dx
         self.dy = dy
+        self.x1 = 0
+        self.y1 = 0
+        self.x2 = 0
+        self.y2 = 0
         self.canvas = canvas
 
     def update(self):
-        self.coords = self.canvas.coords(self.id)
-        if self.coords[0] < 0 or self.coords[2] > WIDTH:
+        self.coordinates()
+        if self.x1 < 0 or self.coords[2] > WIDTH:
             self.dx = -self.dx
         if self.coords[1] < 0 or self.coords[3] > HEIGHT:
             self.dy = -self.dy
+        if Sprite.sprites:
+            for sprite in Sprite.sprites:
+                if sprite == self: continue
+                if self.within_y(sprite):
+                    """RIGHT"""
+                    if self.x2 >= sprite.x1:
+                        self.dx = -self.dx
+                    """LEFT"""
+                    if self.x1 <= sprite.x2:
+                        self.dx = -self.dx
         self.canvas.move(self.id, self.dx, self.dy)
 
     def move(self):
         pass
 
+    def get_id(self):
+        if self.id: return self.id
+
     def destroy(self):
-        pass
+        self.canvas.delete(self.id)
 
-    def coords(self):
+    def coordinates(self):
         self.coords = self.canvas.coords(self.id)
-        self.x1 = self.coords[0]
-        self.y1 = self.coords[1]
-        self.x2 = self.coords[2]
-        self.y2 = self.coords[3]
+        if self.coords:
+            self.x1 = self.coords[0]
+            self.y1 = self.coords[1]
+            self.x2 = self.coords[2]
+            self.y2 = self.coords[3]
 
-    def within_y(self, sprite):
-        for sprite in self.sprites:
-            if sprite==
+    def within_y(self, sprite2):
+        sprite2.coordinates()
+        if (sprite2.y2 > self.y1 and sprite2.y2 < self.y2) or\
+                (sprite2.y1 > self.y1 and sprite2.y1 < self.y2) or\
+                (sprite2.y1 > self.y1 and sprite2.y2 < self.y2):
+            return True
+        else:
+            return False
+
+    def within_x(self, sprite2):
+        sprite2.coordinates()
+        if (sprite2.x2 > self.x1 and sprite2.x2 < self.x2) or\
+                (sprite2.x1 > self.x1 and sprite2.x1 < self.x2) or\
+                (sprite2.x1 > self.x1 and sprite2.x2 < self.x2):
+            return True
+        else:
+            return False
 
 
 class Ship(Sprite):
-    def __init__(self, canvas, x, y):
-        super(Ship, self).__init__(canvas, x, y)
+    def __init__(self, canvas):
+        super(Ship, self).__init__(canvas)
         self.id = self.canvas.create_oval(100,100,125,125)
 
     def move_up(self):
@@ -125,24 +150,25 @@ class Ship(Sprite):
         elif self.dy < 0: self.dy += 1
 
 class AsteroidLarge(Sprite):
-    def __init__(self, canvas, x, y):
-        super(AsteroidLarge, self).__init__(canvas, x, y)
+    def __init__(self, canvas):
+        super(AsteroidLarge, self).__init__(canvas)
         self.id = self.canvas.create_oval(0, 0, 50, 50, fill="", outline="black")
         x1 = random.randrange(WIDTH/2)
         y1 = random.randrange(HEIGHT/2)
         self.canvas.coords(self.id, x1, y1, x1+50, y1+50)
         self.dx = 1 #random.randrange(1, 4)
         self.dy = 1 #random.randrange(1, 4)
+        Sprite.sprites.append(self)
 
 class AsteroidMedium(Sprite):
-    def __init__(self, canvas, x, y):
-        super(AsteroidMedium, self).__init__(canvas, x, y)
+    def __init__(self, canvas):
+        super(AsteroidMedium, self).__init__(canvas)
         pass
 
 
 class AsteroidSmall(Sprite):
-    def __init__(self, canvas, x, y):
-        super(AsteroidSmall, self).__init__(canvas, x, y)
+    def __init__(self, canvas):
+        super(AsteroidSmall, self).__init__(canvas)
         pass
 
 
