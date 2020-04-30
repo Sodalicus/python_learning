@@ -14,8 +14,8 @@ class Application(Frame):
         super(Application, self).__init__(master)
         self.grid()
         self.create_canvas()
-        self.myship = Ship(self.canvas)
-        self.create_widgets()
+        #self.myship = Ship(self.canvas)
+        #self.create_widgets()
         self.master = master
 
     def create_canvas(self):
@@ -65,27 +65,24 @@ class Sprite():
 
     def update(self):
         self.coordinates()
-        if self.x1 < 0 or self.coords[2] > WIDTH:
-            self.dx = -self.dx
-        if self.coords[1] < 0 or self.coords[3] > HEIGHT:
-            self.dy = -self.dy
         if Sprite.sprites:
             for sprite in Sprite.sprites:
                 if sprite == self: continue
                 if self.within_y(sprite):
                     """RIGHT"""
-                    if self.x2 >= sprite.x1:
+                    if self.x2 >= sprite.x1 or self.x2 >= WIDTH:
                         self.dx = -self.dx
                     """LEFT"""
-                    if self.x1 <= sprite.x2:
+                    if self.x1 <= sprite.x2 or self.x1 <= 0:
                         self.dx = -self.dx
+                if self.within_x(sprite):
+                    """TOP"""
+                    if self.y2 >= sprite.y1 or self.y2 >= HEIGHT:
+                        self.dy = -self.dy
+                    """BOTTOM"""
+                    if self.y1 <= sprite.y2 or self.y1 <= 0:
+                        self.dy = -self.dy
         self.canvas.move(self.id, self.dx, self.dy)
-
-    def move(self):
-        pass
-
-    def get_id(self):
-        if self.id: return self.id
 
     def destroy(self):
         self.canvas.delete(self.id)
@@ -156,8 +153,8 @@ class AsteroidLarge(Sprite):
         x1 = random.randrange(WIDTH/2)
         y1 = random.randrange(HEIGHT/2)
         self.canvas.coords(self.id, x1, y1, x1+50, y1+50)
-        self.dx = 1 #random.randrange(1, 4)
-        self.dy = 1 #random.randrange(1, 4)
+        self.dx = 1
+        self.dy = 1
         Sprite.sprites.append(self)
 
 class AsteroidMedium(Sprite):
