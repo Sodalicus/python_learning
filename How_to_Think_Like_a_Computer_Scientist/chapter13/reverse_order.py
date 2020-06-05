@@ -5,7 +5,7 @@ def reverse_order(infile):
     new_words = []
     words = f.readlines()
     for line in words:
-        new_words.append(line)
+        new_words.insert(0, line)
     print(words)
     print()
     print()
@@ -21,5 +21,9 @@ def reverse_order2(infile):
     print()
     print()
     print(new_words)
+
+def reverse_order3(infile):
+    f = open(infile)
+    words = f.readline:
 
 reverse_order("lorem_nbr.txt")
