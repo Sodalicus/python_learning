@@ -1,0 +1,6 @@
+   1 import urllib.request
+   2 
+   3 url = "https://xml2rfc.tools.ietf.org/public/rfc/xml/rfc2441.xml"
+   4 destination_filename = "rfc2441.xml"
+   5 
+   6 urllib.request.urlretrieve(url, destination_filename)
