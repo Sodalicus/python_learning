@@ -1,15 +1,33 @@
 #!/usr/bin/env python3
 
-import urllib.request
-
-def retrive_page(url):
-    """ Retrieve the contents of a web page.
-        The contents is converted to a string before returning it.
+import urllib.request, json
+import requests
+def retrive_ip():
+    """ Retrieve the external ip adress using api.myip.com
+        Json gets converted to python dict and string containg ip is returned.
     """
+    url = "https://api.myip.com"
     my_socket = urllib.request.urlopen(url)
-    dta = str(my_socket.readall())
+    json_data = my_socket.read().decode()
     my_socket.close()
-    return dta
+    dict_data = json.loads(json_data)
+    return dict_data["ip"]
 
-ip_text = retrive_page("https://api.myip.com")
-print(ip_text)
+def retrive_ip2():
+    import requests
+    r = requests.get(r'http://jsonip.com')
+    # r = requests.get(r'https://ifconfig.co/json')
+    ip= r.json()['ip']
+    print('Your IP is {}'.format(ip))
+
+def retrive_ip3():
+    import requests
+    r = requests.get(r'https://api.myip.com')
+    ip= r.json()['ip']
+    print('Your IP is {}'.format(ip))
+
+
+
+print(retrive_ip())
+retrive_ip2()
+retrive_ip3()
