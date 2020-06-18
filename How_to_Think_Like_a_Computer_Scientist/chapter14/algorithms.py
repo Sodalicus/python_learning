@@ -128,3 +128,77 @@ test(remove_adjacent_dups([1,2,3,3,3,3,5,6,9,9]) == [1,2,3,5,6,9])
 test(remove_adjacent_dups([]) == [])
 test(remove_adjacent_dups(["a", "big", "big", "bite", "dog"]) ==
                                    ["a", "big", "bite", "dog"])
+
+all_words = get_words_in_book("AliceInWonderland.txt")
+all_words.sort()
+book_words = remove_adjacent_dups(all_words)
+#print("There are {0} words in the book. Only {1} are unique.".\
+#        format(len(all_words), len(book_words)))
+#print("The first 100 words are\n{0}".format(book_words[:100]))
+
+def merge(xxs, yyx):
+    pass
+
+xs = [1,3,5,7,9,11,13,15,17,19]
+ys = [4,8,12,16,20,24]
+zs = xs+ys
+zs.sort()
+
+def merge(xs, ys):
+    """merge sorted lists xs and ys. Return a sorted result """
+    result = []
+    xi = 0
+    yi = 0
+
+    while True:
+        if xi >= len(xs):           # ifs list is finished.
+            result.extend(ys[yi:])
+            return result
+
+        if yi >= len(ys):
+            result.extend(xs[xi:])
+            return result
+
+        if xs[xi] <= ys[yi]:
+            result.append(xs[xi])
+            xi += 1
+        else:
+            result.append(ys[yi])
+            yi += 1
+
+test(merge(xs, []) == xs)
+test(merge([], ys) == ys)
+test(merge([], []) == [])
+test(merge(xs, ys) == zs)
+test(merge([1,2,3], [3,4,5]) == [1,2,3,3,4,5])
+test(merge(["a", "big", "cat"], ["big", "bite", "dog"]) ==\
+        ["a", "big", "big", "bite", "cat", "dog"])
+
+def merge_present_both(xs,ys):
+    """merge sorted lists xs and ys. Return only those that are present in both lists. """
+    result = []
+    xi = 0
+    yi = 0
+    if xi >= len(xs):
+        print(result)
+        return result
+    if yi >= len(ys):
+        print(result)
+        return result
+
+    if xs[xi] <= ys[yi]:
+        if xs[xi] in ys:
+            result.append(xs[xi])
+        xi += 1
+    else:
+        if ys[yi] in xs:
+            result.append(ys[yi])
+        yi += 1
+
+test(merge_present_both([1,2,3,5],[1,2,4,6]) == [1,1,2,2])
+test(merge_present_both([xs], []) == [])
+test(merge_present_both([], ys) == [])
+test(merge_present_both(["a", "big", "cat"], ["big", "bite", "dog"]) ==\
+        ["big", "big"])
+
+
