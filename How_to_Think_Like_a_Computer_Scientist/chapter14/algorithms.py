@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import pickle,time,random
 from testing import test
+import draw_queens
 
 def search_linear(xs, target):
     """ Find and return the index of target in sequence xs """
@@ -408,6 +409,7 @@ test(has_clashes([4,6,2,0,5,7,1,3]))
 test(has_clashes([0,1,2,3]))
 test(not has_clashes([2,0,3,1]))
 
+
 def eight_queens():
     rng = random.Random()
 
@@ -423,6 +425,7 @@ def eight_queens():
         #if bd in good_boards:
             #print("Repetition")
         if not has_clashes(bd) and bd not in sym_boards:
+            draw_queens.draw_board(bd)
             unique_boards.append(bd[:])
             sym_boards.extend(symetric_board(bd))
             print("Symytric boards: ")
@@ -434,8 +437,7 @@ def eight_queens():
             #t0 = time.clock()
             tries = 0
             num_found += 1
-    print("Unique boards: ")
-    print(unique_boards)
+eight_queens()
 
 def invert_board_x(bd):
     inv_bd = []
@@ -592,5 +594,5 @@ def average_drafts(n):
         sum += multi_lotto(n)
     print()
     return sum/20
-a = average_drafts(6)
-print("On average it takes {} drafts to get {} hits on any of four coupons.".format(a,5))
+#a = average_drafts(6)
+#print("On average it takes {} drafts to get {} hits on any of four coupons.".format(a,5))
