@@ -1,6 +1,7 @@
-#!/usr/bin/env python3
+#/usr/bin/env python3
 
 # Chapter 17 - PyGame
+# Draw a board and place balls 
 import pygame
 
 def draw_board(the_board):

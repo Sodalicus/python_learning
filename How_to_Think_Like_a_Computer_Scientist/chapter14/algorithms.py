@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import pickle,time,random
 from testing import test
-import draw_queens
 
 def search_linear(xs, target):
     """ Find and return the index of target in sequence xs """
@@ -425,7 +424,6 @@ def eight_queens():
         #if bd in good_boards:
             #print("Repetition")
         if not has_clashes(bd) and bd not in sym_boards:
-            draw_queens.draw_board(bd)
             unique_boards.append(bd[:])
             sym_boards.extend(symetric_board(bd))
             print("Symytric boards: ")
