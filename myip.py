@@ -11,7 +11,8 @@ def retrive_ip():
     json_data = my_socket.read().decode()
     my_socket.close()
     dict_data = json.loads(json_data)
-    return dict_data["ip"]
+    #return dict_data["ip"]
+    print(dict_data["ip"])
 
 def retrive_ip2():
     import requests
@@ -23,11 +24,13 @@ def retrive_ip2():
 def retrive_ip3():
     import requests
     r = requests.get(r'https://api.myip.com')
+    print(r.json())
     ip= r.json()['ip']
     print('Your IP is {}'.format(ip))
 
 
 
-print(retrive_ip())
-retrive_ip2()
+#print(retrive_ip())
+#retrive_ip()
+#retrive_ip2()
 retrive_ip3()
