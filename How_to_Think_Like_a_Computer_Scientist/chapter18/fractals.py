@@ -8,6 +8,7 @@ def koch(t, order, size):
         Make turtle t draw a Koch fractal of 'order' and 'size'.
         Leave the turtle facing the direction.
     """
+    print("order: ", order)
 
     if order == 0:
         t.forward(size)
@@ -16,11 +17,21 @@ def koch(t, order, size):
             koch(t, order-1, size/3)
             t.left(angle)
 
+
+
+
+
+
+
+
+
+
+
 wn = turtle.Screen()
 
 tess = turtle.Turtle()
 
-koch(tess, 2, 200)
+koch(tess, 3, 200)
 
 def exit_turtle():
     wn.bye()
