@@ -1,23 +1,47 @@
 #!/usr/bin/env python3
-import turtle
+import turtle,math
 
-def sierpinski(t, order, size):
-    if order == 0:
-        for angle in (120, 120, 0):
-            t.forward(size)
-            t.left(angle)
+def sierpinski(point, depth, size):
+    turtles = []
+    angles_lists = [(120, 120, 120), (-120, -120, -120), (-120, -120, -120)]
+    x,y = point
+    if depth == 0 or depth == 1:
+        tops = [(x,y,0), (size,y,180), (size/2, size*math.sqrt(3)/2, -60)]
     else:
-        for i in range(3):
-            sierpinski(t, order-1, size//2)
+        tops = [(x,y,0), (size/2**(depth-1),y,180), (size/2**(depth), (size/2**(depth-1))*math.sqrt(3)/2,-60)]
+
+    for x,y,angle in tops:
+        print(x,y,angle)
+        tess = turtle.Turtle()
+        tess.hideturtle()
+        tess.penup()
+        tess.goto(x,y)
+        tess.pendown()
+        tess.setheading(angle)
+        turtles.append(tess)
+
+        for i,tess in enumerate(turtles):
+            angles = angles_lists[i]
+            for angle in angles:
+                if depth == 0:
+                    tess.forward(size)
+                    tess.left(angle)
+                else:
+                    tess.forward(size/2**depth)
+                    tess.left(angle)
+
+
+
+
+
 
 
 def exit_turtle():
     wn.bye()
 
 wn = turtle.Screen()
-tess = turtle.Turtle()
 
-sierpinski(tess, 1, 100)
+sierpinski((0,0), 3, 100)
 
 wn.onkey(exit_turtle, key="Escape")
 wn.listen()
