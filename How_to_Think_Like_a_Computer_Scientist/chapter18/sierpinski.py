@@ -8,6 +8,8 @@ def sierpinski(point, depth, size):
     if depth == 0 or depth == 1:
         tops = [(x,y,0), (size,y,180), (size/2, size*math.sqrt(3)/2, -60)]
     else:
+        for point in [(x,y), (size/2**(depth-1),y), (size/2**depth, (size/2**(depth-1))*math.sqrt(3)/2)]:
+            sierpinski(point, depth-1,size/2**(depth-1)) 
         tops = [(x,y,0), (size/2**(depth-1),y,180), (size/2**(depth), (size/2**(depth-1))*math.sqrt(3)/2,-60)]
 
     for x,y,angle in tops:
@@ -31,17 +33,12 @@ def sierpinski(point, depth, size):
                     tess.left(angle)
 
 
-
-
-
-
-
 def exit_turtle():
     wn.bye()
 
 wn = turtle.Screen()
-
-sierpinski((0,0), 3, 100)
+point = 0,0
+sierpinski(point, 3, 100)
 
 wn.onkey(exit_turtle, key="Escape")
 wn.listen()
