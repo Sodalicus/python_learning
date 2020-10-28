@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Calculator app using tkinter for gui
+# Version 0.1
 from tkinter import *
 from tkinter import ttk
 
