@@ -14,10 +14,12 @@ import sqlite3, os
 from create_base import *
 from crud_mod import *
 
-basefile = 'crud.db'
-
 
 def main():
+    sql_pragma = ('PRAGMA foreign_keys = ON;')
+    # Set foreign keys constraint on
+    exe_query(sql_pragma)
+
     while True:
         hello = "What do you want to do?\n"
         hello += "1) Create\n"
@@ -30,10 +32,13 @@ def main():
         choice = ""
         print()
 
+
         choice = input(hello).lower()
         if choice == "0":
+            """Exit program"""
             print("Over")
             break
+
 
         elif choice == "1":
             """Create"""
@@ -70,14 +75,14 @@ def main():
                 if mm == "1":
                     """Read classes"""
                     sql_query = ('SELECT * FROM class;')
-                    classes = read_all_rows(basefile, sql_query)
+                    classes = read_all_rows(sql_query)
                     print()
                     print_multi_row(classes)
 
                 elif mm == "2":
                     """Read all students"""
                     sql_query = ('SELECT * FROM student;')
-                    students = read_all_rows(basefile, sql_query)
+                    students = read_all_rows(sql_query)
                     print()
                     print_multi_row(students)
 
@@ -85,8 +90,8 @@ def main():
                     """Read student"""
                     surname = input("Type in student's surname: ").strip()
                     surname = surname.capitalize()
-                    sql_query = ('SELECT * FROM student WHERE surname=?', (surname,))
-                    student = read_single_row(basefile, sql_query)
+                    sql_query = 'SELECT * FROM student WHERE surname=?'
+                    student = read_single_row(sql_query, surname)
                     print()
                     print_single_row(student)
 
@@ -94,6 +99,7 @@ def main():
                     """Go back"""
                     print("Going back")
                     break
+
 
         elif choice == "3":
             """Update"""
@@ -112,6 +118,7 @@ def main():
                     """Update student's name"""
                     students_id = get_integer("What's student id: ")
                     print("Student's details: ")
+                    print("id,   name,   surname,  class")
                     print_single_row(return_student(students_id))
                     print()
                     name = input("What's new name: ").capitalize()
@@ -132,15 +139,23 @@ def main():
                     print()
                     class_name = None
                     while class_name not in get_classes():
+                        print("Available classes: ", get_classes())
                         class_name = input("What's new student's class: ").upper()
                     update_students_class(class_name,students_id)
                 elif choice == "4":
                     """Update class' profile"""
-                    pass
+                    class_name = None
+                    while class_name not in get_classes():
+                        print("Available classes: ", get_classes())
+                        class_name = input("What's the class name which profile you want to update: ")
+                    new_profile = input("What the new class' profile: ")
+                    update_class_profile(new_profile, class_name)
                 elif choice == "0":
                     """Go back"""
                     print("Going back")
                     break
+
+
         elif choice == "4":
             """Delete"""
             while True:
@@ -159,6 +174,7 @@ def main():
                     print("Going back")
                     break
 
+
         elif choice == '5':
             """Reset"""
             create_db()
@@ -166,4 +182,6 @@ def main():
             fill_db('students.csv',sql)
             sql = ('INSERT INTO class VALUES (NULL, ?, ?);')
             fill_db('classes.csv', sql)
+
+
 main()
