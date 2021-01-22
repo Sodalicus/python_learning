@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8" />
+        <title>{{ config.SITE_NAME }}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	</head>
+	<body>
+        <h1>{{ config.SITE_NAME }}:</h1>
+        <!-- formularz dodawania zadania -->
+        <form class="add-form" method="POST" action="{{ url_for('zadania') }}">
+          <input name="zadanie" value=""/>
+          <button type="submit">Dodaj zadanie</button>
+        </form>
+
+        <!-- informacje o sukcesie lub błędzie -->
+        <p>
+          {% if error %}
+            <strong class="error">Błąd: {{ error }}</strong>
+          {% endif %}
+
+          {% for message in get_flashed_messages() %}
+            <strong class="success">{{ message }}</strong>
+          {% endfor %}
+        </p>
+          
+		
+        <ol>
+            <!-- wypisujemy kolejno wszyskie zadania -->
+            {% for zadanie in zadania %}
+              <li>
+                  <!-- wyróżnienie zadań zakończonych -->
+                {% if zadanie.zrobione %}
+                  <span class="done">{{ zadanie.zadanie }} - <em>{{ zadanie.data_pub }}</em></span>
+                {% else %}
+                  {{ zadanie.zadanie }} - <em>{{ zadanie.data_pub }}</em>
+                {% endif %}
+                
+                <!-- formularz zmiany statusu zadania -->
+                {% if not zadanie.zrobione %}
+                  <form method="POST" action="{{ url_for('zrobione') }}">
+                    <!-- wysyłamy jedynie informację o id zadania -->
+                    <input type="hidden" name="id" value="{{ zadanie.id }}" />
+                    <button type="submit">Wykonane</button>
+                  </form>
+                {% endif %}
+                  <form method="POST" action="{{ url_for('usun') }}">
+                    <input type="hidden" name="id" value="{{ zadanie.id }}" />
+                    <button type="submit">Usun</button>
+                  </form>
+              </li>
+
+            {% endfor %}
+        </ol>
+
+        <p><a href="/">Strona główna</a></p>
+	</body>
+</html>
